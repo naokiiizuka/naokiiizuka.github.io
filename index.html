@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en" class="">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Our Days | Life with Vivi</title>
+
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <script>
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            // You can extend your theme here if needed
+          },
+        },
+      };
+    </script>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet" />
+
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+
+    <style>
+      /* Apply Google Fonts */
+      body {
+        font-family: "Poppins", "Noto Sans JP", sans-serif;
+      }
+      /* Fix for anchor links being hidden by fixed header */
+      html {
+        scroll-padding-top: 120px;
+        scroll-behavior: smooth;
+      }
+      /* Add a subtle shadow to text for readability */
+      .text-shadow {
+        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+      }
+      /* Lightbox specific styles */
+      .lightbox-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.8);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 1000;
+        opacity: 0;
+        visibility: hidden;
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+      }
+      .lightbox-overlay.active {
+        opacity: 1;
+        visibility: visible;
+      }
+      .lightbox-content {
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        max-width: 95vw; /* Maximize width relative to viewport */
+        max-height: 95vh; /* Maximize height relative to viewport */
+      }
+      .lightbox-content img {
+        max-width: 100%;
+        max-height: 100%;
+        object-fit: contain;
+        border-radius: 0.375rem; /* rounded-md */
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+      }
+
+      /* Navigation arrows for lightbox */
+      .lightbox-nav-arrow {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        /* Updated to match back-to-top button size (w-12 h-12 = 48px) */
+        width: 48px;
+        height: 48px;
+        padding: 0;
+        border: none; /* Add this to remove default button border */
+        border-radius: 50%; /* Make it a circle */
+        cursor: pointer;
+        user-select: none;
+        transition: background-color 0.2s ease;
+        z-index: 1010; /* Make sure arrows are above image */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        /* Ensure consistency with button defaults */
+        font-family: inherit; /* Inherit font family from body */
+        outline: none; /* Remove outline on focus if desired */
+      }
+
+      .lightbox-nav-arrow:hover {
+        background-color: rgba(0, 0, 0, 0.8);
+      }
+
+      #lightbox-prev {
+        left: 1rem;
+      }
+
+      #lightbox-next {
+        right: 1rem;
+      }
+
+      /* Adjust lightbox content for arrow spacing on smaller screens */
+      @media (max-width: 768px) {
+        .lightbox-content {
+          padding-left: 3rem;
+          padding-right: 3rem;
+        }
+        #lightbox-prev {
+          left: 0.5rem;
+        }
+        #lightbox-next {
+          right: 0.5rem;
+        }
+      }
+
+      /* Material Symbols Fill style and centering for square area */
+      .material-symbols-rounded {
+        font-variation-settings: "FILL" 1, /* Apply fill style */ "wght" 400, "GRAD" 0, "opsz" 24; /* Optical size for clarity */
+        font-size: inherit; /* Inherit font size unless specifically overridden */
+        line-height: 1; /* Adjust line height to prevent extra vertical space */
+        display: flex; /* Use flexbox for perfect centering */
+        align-items: center; /* Vertically center */
+        justify-content: center; /* Horizontally center */
+      }
+      /* Specific override for theme toggle */
+      #theme-toggle .material-symbols-rounded {
+        width: 20px;
+        height: 20px;
+        font-size: 20px; /* Ensure icon itself is 20px */
+      }
+      /* Specific override for back-to-top button */
+      #back-to-top .material-symbols-rounded {
+        font-size: 24px; /* Default size for material icons in a 24x24 context */
+        width: 24px;
+        height: 24px;
+      }
+      /* Specific override for lightbox navigation arrows */
+      .lightbox-nav-arrow .material-symbols-rounded {
+        /* Target the icon INSIDE the button */
+        font-size: 24px; /* Match the back-to-top icon size */
+      }
+      /* Specific override for close button icon */
+      #lightbox-close .material-symbols-rounded {
+        font-size: 1rem; /* Smaller size for inline icon */
+        vertical-align: middle; /* Align with text baseline */
+        margin-left: 0.5rem; /* Add some space between text and icon */
+      }
+    </style>
+    <script>
+      // Set theme on page load to prevent Flash of Unstyled Content (FOUC)
+      if (localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        document.documentElement.classList.add("dark");
+      } else {
+        document.documentElement.classList.remove("dark");
+      }
+    </script>
+  </head>
+  <body class="bg-gray-50 dark:bg-gray-900 text-gray-800 dark:text-gray-200 transition-colors duration-300">
+    <header class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
+      <div class="container mx-auto px-6 py-4 flex justify-between items-center">
+        <a href="#" id="logo-link">
+          <h1 class="text-xl font-medium tracking-wider text-gray-800 dark:text-gray-100">OUR DAYS</h1>
+        </a>
+
+        <div class="flex items-center">
+          <nav class="hidden md:flex items-center space-x-6 mr-6">
+            <a href="#gallery" class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">Gallery</a>
+            <a href="#blog" class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">Blog</a>
+          </nav>
+
+          <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none rounded-lg text-sm p-2.5">
+            <span id="theme-toggle-dark-icon" class="material-symbols-rounded w-5 h-5">dark_mode</span>
+            <span id="theme-toggle-light-icon" class="material-symbols-rounded w-5 h-5 hidden">light_mode</span>
+          </button>
+
+          <button id="mobile-menu-button" class="md:hidden text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white focus:outline-none ml-2">
+            <i class="fas fa-bars text-2xl"></i>
+          </button>
+        </div>
+      </div>
+
+      <nav id="mobile-menu" class="hidden md:hidden bg-white dark:bg-gray-800 py-2 border-t border-gray-200 dark:border-gray-700">
+        <a href="#gallery" class="block px-6 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Gallery</a>
+        <a href="#blog" class="block px-6 py-2 text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">Blog</a>
+      </nav>
+    </header>
+
+    <main>
+      <section class="relative h-[70vh] flex items-center justify-center text-white overflow-hidden">
+        <picture class="absolute inset-0 w-full h-full -z-10">
+          <source media="(min-width: 1280px)" srcset="https://images.unsplash.com/photo-1671318805052-deee86db6df3?q=80&w=1920&h=1080&auto=format&fit=crop" />
+          <source media="(min-width: 768px)" srcset="https://images.unsplash.com/photo-1671318805052-deee86db6df3?q=80&w=1200&h=800&auto=format&fit=crop" />
+          <img src="https://images.unsplash.com/photo-1671318805052-deee86db6df3?q=80&w=600&h=800&auto=format&fit=crop" alt="A beautiful day with Vivi" class="w-full h-full object-cover" />
+        </picture>
+        <div class="text-center z-10">
+          <h2 class="text-4xl md:text-5xl font-light tracking-widest text-shadow">LIFE WITH VIVI</h2>
+          <p class="text-lg md:text-xl mt-2 text-shadow">A simple record of our days.</p>
+        </div>
+      </section>
+
+      <section id="gallery" class="py-16 md:py-24">
+        <div class="container mx-auto px-6">
+          <div class="text-center mb-12">
+            <h3 class="text-3xl font-light text-center text-gray-800 dark:text-gray-100 tracking-wider">Gallery</h3>
+            <p class="mt-4 text-gray-600 dark:text-gray-400">Memories of our family and our dog, Vivi, living in Saitama. We also post videos on our Instagram.</p>
+          </div>
+          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="w-full aspect-square overflow-hidden rounded-md">
+              <img class="w-full h-full object-cover hover:opacity-80 transition-opacity cursor-pointer" src="https://images.unsplash.com/photo-1670169141450-da63fae030aa?q=80&w=500&h=500&auto=format&fit=crop" alt="Gallery image 1" />
+            </div>
+            <div class="w-full aspect-square overflow-hidden rounded-md">
+              <img class="w-full h-full object-cover hover:opacity-80 transition-opacity cursor-pointer" src="https://images.unsplash.com/photo-1618483100149-c82bd3adec28?q=80&w=500&h=500&auto=format&fit=crop" alt="Gallery image 2" />
+            </div>
+            <div class="w-full aspect-square overflow-hidden rounded-md">
+              <img class="w-full h-full object-cover hover:opacity-80 transition-opacity cursor-pointer" src="https://images.unsplash.com/photo-1612788023965-7b435dddc2bb?q=80&w=500&h=500&auto=format&fit=crop" alt="Gallery image 3" />
+            </div>
+            <div class="w-full aspect-square overflow-hidden rounded-md">
+              <img class="w-full h-full object-cover hover:opacity-80 transition-opacity cursor-pointer" src="https://images.unsplash.com/photo-1618482564908-a65daffb65e1?q=80&w=500&h=500&auto=format&fit=crop" alt="Gallery image 4" />
+            </div>
+          </div>
+          <div class="text-center mt-12">
+            <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white text-base font-medium">VIEW MORE &rarr;</a>
+          </div>
+        </div>
+      </section>
+
+      <section id="blog" class="py-16 md:py-24 bg-white dark:bg-black">
+        <div class="container mx-auto px-6">
+          <h3 class="text-3xl font-light text-center mb-12 text-gray-800 dark:text-gray-100 tracking-wider">Recent Posts</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <a href="#" class="block bg-white dark:bg-gray-800 overflow-hidden group rounded-md border border-gray-200 dark:border-gray-700">
+              <img src="https://images.unsplash.com/photo-1703733572989-026dbaf7fc96?q=80&w=400&h=250&auto=format&fit=crop" alt="A chihuahua running in a park" class="w-full h-48 object-cover group-hover:opacity-80 transition-opacity" />
+              <div class="p-5">
+                <span class="text-sm text-gray-500 dark:text-gray-400">June 8, 2025</span>
+                <h4 class="font-medium text-lg my-1 text-gray-800 dark:text-gray-100">First time at the dog park!</h4>
+                <span class="text-gray-500 dark:text-gray-400 group-hover:text-gray-800 dark:group-hover:text-white text-sm font-medium">READ MORE &rarr;</span>
+              </div>
+            </a>
+            <a href="#" class="block bg-white dark:bg-gray-800 overflow-hidden group rounded-md border border-gray-200 dark:border-gray-700">
+              <img src="https://plus.unsplash.com/premium_photo-1675881736832-66baa763cd4e?q=80&w=400&h=250&auto=format&fit=crop" alt="A dog with a birthday cake" class="w-full h-48 object-cover group-hover:opacity-80 transition-opacity" />
+              <div class="p-5">
+                <span class="text-sm text-gray-500 dark:text-gray-400">May 20, 2025</span>
+                <h4 class="font-medium text-lg my-1 text-gray-800 dark:text-gray-100">Vivi's homemade birthday cake</h4>
+                <span class="text-gray-500 dark:text-gray-400 group-hover:text-gray-800 dark:group-hover:text-white text-sm font-medium">READ MORE &rarr;</span>
+              </div>
+            </a>
+            <a href="#" class="block bg-white dark:bg-gray-800 overflow-hidden group rounded-md border border-gray-200 dark:border-gray-700">
+              <img src="https://images.unsplash.com/photo-1745922462555-64c500d4f0c8?q=80&w=400&h=250&auto=format&fit=crop" alt="A dog in a field of flowers" class="w-full h-48 object-cover group-hover:opacity-80 transition-opacity" />
+              <div class="p-5">
+                <span class="text-sm text-gray-500 dark:text-gray-400">April 15, 2025</span>
+                <h4 class="font-medium text-lg my-1 text-gray-800 dark:text-gray-100">A walk in the park for cherry blossoms</h4>
+                <span class="text-gray-500 dark:text-gray-400 group-hover:text-gray-800 dark:group-hover:text-white text-sm font-medium">READ MORE &rarr;</span>
+              </div>
+            </a>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="bg-gray-800 dark:bg-black">
+      <div class="container mx-auto px-6 py-12 text-center">
+        <p class="mb-4 text-gray-400">Follow Us</p>
+        <div class="flex justify-center space-x-6 mb-8">
+          <a href="https://instagram.com" target="_blank" class="text-2xl text-gray-300 hover:text-white transition-colors"><i class="fab fa-instagram"></i></a>
+          <a href="https://facebook.com" target="_blank" class="text-2xl text-gray-300 hover:text-white transition-colors"><i class="fab fa-facebook-square"></i></a>
+        </div>
+        <p class="text-gray-500 text-sm">&copy; 2025 Our Days. All Rights Reserved.</p>
+      </div>
+    </footer>
+
+    <div id="lightbox-overlay" class="lightbox-overlay">
+      <button id="lightbox-prev" type="button" class="lightbox-nav-arrow hidden md:block">
+        <span class="material-symbols-rounded">arrow_back</span>
+      </button>
+      <div class="lightbox-content">
+        <img id="lightbox-image" src="" alt="Enlarged Gallery Image" />
+        <button id="lightbox-close" class="mt-4 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white text-base font-medium flex items-center">CLOSE <span class="material-symbols-rounded" style="font-size: 1rem; vertical-align: middle">close</span></button>
+      </div>
+      <button id="lightbox-next" type="button" class="lightbox-nav-arrow hidden md:block">
+        <span class="material-symbols-rounded">arrow_forward</span>
+      </button>
+    </div>
+
+    <button id="back-to-top" class="hidden fixed bottom-6 right-6 bg-gray-800 dark:bg-gray-200 text-white dark:text-gray-800 w-12 h-12 rounded-full shadow-lg hover:bg-gray-900 dark:hover:bg-white transition-colors flex items-center justify-center z-50">
+      <span class="material-symbols-rounded">arrow_upward</span>
+    </button>
+
+    <script>
+      // Hamburger menu
+      const mobileMenuButton = document.getElementById("mobile-menu-button");
+      const mobileMenu = document.getElementById("mobile-menu");
+      mobileMenuButton.addEventListener("click", () => mobileMenu.classList.toggle("hidden"));
+      document.querySelectorAll("#mobile-menu a").forEach((link) => {
+        link.addEventListener("click", () => mobileMenu.classList.add("hidden"));
+      });
+
+      // Scroll to top button functionality
+      const logoLink = document.getElementById("logo-link");
+      const backToTopButton = document.getElementById("back-to-top");
+      logoLink.addEventListener("click", (e) => {
+        e.preventDefault();
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+      window.addEventListener("scroll", () => {
+        if (window.scrollY > 200) backToTopButton.classList.remove("hidden");
+        else backToTopButton.classList.add("hidden");
+      });
+      backToTopButton.addEventListener("click", () => {
+        window.scrollTo({ top: 0, behavior: "smooth" });
+      });
+
+      // --- THEME TOGGLE ---
+      const themeToggleDarkIcon = document.getElementById("theme-toggle-dark-icon"); // This is the MOON icon
+      const themeToggleLightIcon = document.getElementById("theme-toggle-light-icon"); // This is the SUN icon
+      const themeToggleButton = document.getElementById("theme-toggle");
+
+      // Updates the visibility of the sun/moon icons based on the current theme
+      const updateThemeIcons = () => {
+        if (document.documentElement.classList.contains("dark")) {
+          // If currently in dark mode, show the SUN icon (to switch to light mode)
+          themeToggleLightIcon.classList.remove("hidden");
+          themeToggleDarkIcon.classList.add("hidden");
+        } else {
+          // If currently in light mode, show the MOON icon (to switch to dark mode)
+          themeToggleLightIcon.classList.add("hidden");
+          themeToggleDarkIcon.classList.remove("hidden");
+        }
+      };
+
+      updateThemeIcons(); // Set initial icon state on page load
+
+      // Toggles the dark mode class and saves the preference to local storage
+      themeToggleButton.addEventListener("click", () => {
+        document.documentElement.classList.toggle("dark");
+
+        let newTheme = document.documentElement.classList.contains("dark") ? "dark" : "light";
+        localStorage.setItem("theme", newTheme);
+
+        updateThemeIcons();
+      });
+
+      // --- GALLERY LIGHTBOX FUNCTIONALITY (Modified) ---
+      const galleryImages = Array.from(document.querySelectorAll("#gallery .grid-cols-1 > div > img"));
+      const lightboxOverlay = document.getElementById("lightbox-overlay");
+      const lightboxImage = document.getElementById("lightbox-image");
+      const lightboxCloseButton = document.getElementById("lightbox-close");
+      const lightboxPrevButton = document.getElementById("lightbox-prev");
+      const lightboxNextButton = document.getElementById("lightbox-next");
+
+      let currentImageIndex = 0; // Index of the currently displayed image in the lightbox
+
+      // Displays the image at the given index in the lightbox
+      const showImage = (index) => {
+        if (index < 0) {
+          currentImageIndex = galleryImages.length - 1; // Loop to the last image if going before the first
+        } else if (index >= galleryImages.length) {
+          currentImageIndex = 0; // Loop to the first image if going past the last
+        } else {
+          currentImageIndex = index;
+        }
+        lightboxImage.src = galleryImages[currentImageIndex].src;
+      };
+
+      // Add click event listeners to all gallery images to open the lightbox
+      galleryImages.forEach((img, index) => {
+        img.addEventListener("click", function () {
+          showImage(index); // Display the clicked image
+          lightboxOverlay.classList.add("active"); // Add 'active' class to show lightbox
+          document.body.style.overflow = "hidden"; // Disable scrolling on the body
+        });
+      });
+
+      // Closes the lightbox and re-enables body scrolling
+      const closeLightbox = () => {
+        lightboxOverlay.classList.remove("active"); // Remove 'active' class to hide lightbox
+        document.body.style.overflow = ""; // Re-enable scrolling on the body
+      };
+
+      // Event listener for the close button
+      lightboxCloseButton.addEventListener("click", closeLightbox);
+
+      // Closes the lightbox when clicking on the overlay (but not on the image itself, or buttons)
+      lightboxOverlay.addEventListener("click", function (event) {
+        // Only close if the click is directly on the overlay itself, not its children
+        if (event.target === lightboxOverlay) {
+          closeLightbox();
+        }
+      });
+
+      // Event listener for the previous image navigation button
+      lightboxPrevButton.addEventListener("click", (event) => {
+        event.stopPropagation(); // Stop event propagation to prevent overlay close
+        showImage(currentImageIndex - 1);
+      });
+
+      // Event listener for the next image navigation button
+      lightboxNextButton.addEventListener("click", (event) => {
+        event.stopPropagation(); // Stop event propagation to prevent overlay close
+        showImage(currentImageIndex + 1);
+      });
+    </script>
+  </body>
+</html>

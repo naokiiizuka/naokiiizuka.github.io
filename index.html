@@ -55,6 +55,10 @@
         opacity: 0;
         visibility: hidden;
         transition: opacity 0.3s ease, visibility 0.3s ease;
+        /* スワイプ中の選択防止 */
+        user-select: none;
+        -webkit-user-drag: none;
+        -webkit-tap-highlight-color: transparent;
       }
       .lightbox-overlay.active {
         opacity: 1;
@@ -67,13 +71,12 @@
         align-items: center;
         justify-content: center;
         /* Sizes will be set by JS dynamically */
-        /* max-width: none !important; /* JS will manage max-width */
       }
       .lightbox-content img {
         max-width: 100%; /* Parent's width */
         max-height: 100%; /* Parent's height */
         object-fit: contain; /* Ensure full image is visible */
-        border-radius: 0.375rem; /* rounded-md */
+        border-radius: 0; /* 角丸をなくす */
         box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
       }
 
@@ -88,7 +91,7 @@
         height: 48px; /* Set desired button size */
         padding: 0;
         border: none;
-        border-radius: 50%;
+        border-radius: 0; /* 正四角形にする */
         cursor: pointer;
         user-select: none;
         transition: background-color 0.2s ease;
@@ -111,6 +114,32 @@
 
       #lightbox-next {
         right: 24px; /* Fixed distance from right edge */
+      }
+
+      /* Lightbox Close Button - 右上に配置 */
+      #lightbox-close {
+        position: absolute;
+        /* lightbox-content の右上に配置するため、top と right を調整 */
+        top: 0;
+        right: 0;
+        background-color: rgba(0, 0, 0, 0.5);
+        color: white;
+        width: 48px; /* サイズを固定 */
+        height: 48px; /* サイズを固定 */
+        border: none;
+        border-radius: 0; /* 四角形にする */
+        cursor: pointer;
+        z-index: 1020; /* ナビゲーション矢印より手前に */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-family: inherit;
+        outline: none;
+        transition: background-color 0.2s ease;
+      }
+
+      #lightbox-close:hover {
+        background-color: rgba(0, 0, 0, 0.8);
       }
 
       /* Material Symbols Fill style and centering for square area */
@@ -140,9 +169,7 @@
       }
       /* Specific override for close button icon */
       #lightbox-close .material-symbols-rounded {
-        font-size: 1rem;
-        vertical-align: middle;
-        margin-left: 0.5rem;
+        font-size: 24px;
       }
     </style>
     <script>
@@ -203,19 +230,11 @@
             <h3 class="text-3xl font-light text-center text-gray-800 dark:text-gray-100 tracking-wider">Gallery</h3>
             <p class="mt-4 text-gray-600 dark:text-gray-400">Memories of our family and our dog, Vivi, living in Saitama. We also post videos on our Instagram.</p>
           </div>
-          <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-            <div class="w-full aspect-square overflow-hidden rounded-md">
-              <img class="w-full h-full object-cover hover:opacity-80 transition-opacity cursor-pointer" src="https://images.unsplash.com/photo-1670169141450-da63fae030aa?q=80&w=500&h=500&auto=format&fit=crop" alt="Gallery image 1" data-original-src="https://images.unsplash.com/photo-1670169141450-da63fae030aa?q=80" />
-            </div>
-            <div class="w-full aspect-square overflow-hidden rounded-md">
-              <img class="w-full h-full object-cover hover:opacity-80 transition-opacity cursor-pointer" src="https://images.unsplash.com/photo-1618483100149-c82bd3adec28?q=80&w=500&h=500&auto=format&fit=crop" alt="Gallery image 2" data-original-src="https://images.unsplash.com/photo-1618483100149-c82bd3adec28?q=80" />
-            </div>
-            <div class="w-full aspect-square overflow-hidden rounded-md">
-              <img class="w-full h-full object-cover hover:opacity-80 transition-opacity cursor-pointer" src="https://images.unsplash.com/photo-1612788023965-7b435dddc2bb?q=80&w=500&h=500&auto=format&fit=crop" alt="Gallery image 3" data-original-src="https://images.unsplash.com/photo-1612788023965-7b435dddc2bb?q=80" />
-            </div>
-            <div class="w-full aspect-square overflow-hidden rounded-md">
-              <img class="w-full h-full object-cover hover:opacity-80 transition-opacity cursor-pointer" src="https://images.unsplash.com/photo-1618482564908-a65daffb65e1?q=80&w=500&h=500&auto=format&fit=crop" alt="Gallery image 4" data-original-src="https://images.unsplash.com/photo-1618482564908-a65daffb65e1?q=80" />
-            </div>
+          <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
+            <div class="w-full aspect-square overflow-hidden"><img class="w-full h-full object-cover hover:opacity-80 transition-opacity cursor-pointer" src="https://images.unsplash.com/photo-1670169141450-da63fae030aa?q=80&w=500&h=500&auto=format&fit=crop" alt="Gallery image 1" data-original-src="https://images.unsplash.com/photo-1670169141450-da63fae030aa?q=80" /></div>
+            <div class="w-full aspect-square overflow-hidden"><img class="w-full h-full object-cover hover:opacity-80 transition-opacity cursor-pointer" src="https://images.unsplash.com/photo-1618483100149-c82bd3adec28?q=80&w=500&h=500&auto=format&fit=crop" alt="Gallery image 2" data-original-src="https://images.unsplash.com/photo-1618483100149-c82bd3adec28?q=80" /></div>
+            <div class="w-full aspect-square overflow-hidden"><img class="w-full h-full object-cover hover:opacity-80 transition-opacity cursor-pointer" src="https://images.unsplash.com/photo-1612788023965-7b435dddc2bb?q=80&w=500&h=500&auto=format&fit=crop" alt="Gallery image 3" data-original-src="https://images.unsplash.com/photo-1612788023965-7b435dddc2bb?q=80" /></div>
+            <div class="w-full aspect-square overflow-hidden"><img class="w-full h-full object-cover hover:opacity-80 transition-opacity cursor-pointer" src="https://images.unsplash.com/photo-1618482564908-a65daffb65e1?q=80&w=500&h=500&auto=format&fit=crop" alt="Gallery image 4" data-original-src="https://images.unsplash.com/photo-1618482564908-a65daffb65e1?q=80" /></div>
           </div>
           <div class="text-center mt-12">
             <a href="#" class="text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white text-base font-medium">VIEW MORE &rarr;</a>
@@ -273,7 +292,9 @@
       </button>
       <div id="lightbox-content" class="lightbox-content">
         <img id="lightbox-image" src="" alt="Enlarged Gallery Image" />
-        <button id="lightbox-close" class="mt-4 text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white text-base font-medium flex items-center">CLOSE <span class="material-symbols-rounded" style="font-size: 1rem; vertical-align: middle">close</span></button>
+        <button id="lightbox-close" type="button" class="absolute top-4 right-4 bg-black/50 text-white rounded-full w-12 h-12 flex items-center justify-center cursor-pointer z-20">
+          <span class="material-symbols-rounded">close</span>
+        </button>
       </div>
       <button id="lightbox-next" type="button" class="lightbox-nav-arrow">
         <span class="material-symbols-rounded">arrow_forward</span>
@@ -345,6 +366,9 @@
       const ARROW_HORIZONTAL_OFFSET = 24; // px - Distance from browser edge
 
       let currentImageIndex = 0;
+      let startX = 0; // For swipe
+      let startY = 0; // For swipe
+      const SWIPE_THRESHOLD = 50; // px - Minimum swipe distance
 
       // Function to clean Unsplash URL parameters
       const getOriginalUnsplashUrl = (url) => {
@@ -393,10 +417,6 @@
           const availableViewportWidth = window.innerWidth - overallHorizontalMargin;
           const availableViewportHeight = window.innerHeight - overallVerticalMargin;
 
-          // Close button height + its margin below the image (e.g., mt-4 = 16px)
-          const closeButtonHeight = lightboxCloseButton.offsetHeight + 16;
-          const availableImageHeight = availableViewportHeight - closeButtonHeight; // This is the max height *for the image itself*
-
           const imageNaturalWidth = lightboxImage.naturalWidth;
           const imageNaturalHeight = lightboxImage.naturalHeight;
 
@@ -406,39 +426,19 @@
           // Determine the maximum width for the image based on screen size AND button positions for mobile
           let maxImageWidthForContent = availableViewportWidth;
           if (window.innerWidth <= 768) {
-            // *** スマホの場合、画像の左右の辺がボタンの外側と揃うように調整 ***
-            // 画面幅から、左右のボタンの外側の端までの距離を引く
-            // 左ボタンの左端: ARROW_HORIZONTAL_OFFSET (24px)
-            // 右ボタンの右端: ARROW_HORIZONTAL_OFFSET (24px)
-            // 総計で画面幅から (24px + 24px) x 2 = 96px ではなく
-            // 左右のボタンが占める領域（外側から外側）を引いた残り
-            // 画面幅 - (左側余白 + ボタン幅) - (右側余白 + ボタン幅)
-            // = window.innerWidth - (ARROW_HORIZONTAL_OFFSET + NAV_ARROW_SIZE) * 2
-            // しかし、これはボタンが写真の外側に完全に位置する場合。
-            // 今回はボタンが写真の"辺"に合うようにしたいので、
-            // window.innerWidth - (ARROW_HORIZONTAL_OFFSET + NAV_ARROW_SIZE) * 2
-            // ではなく、ボタンの開始位置からボタンの終わり位置までの範囲を考慮。
-            // 画面幅 - (左の24px) - (右の24px) = window.innerWidth - 48px
-            // この48pxが写真の両端のマージンとなる。
-            // つまり、利用可能な画像の最大幅は
-            // window.innerWidth - (ARROW_HORIZONTAL_OFFSET + NAV_ARROW_SIZE / 2) * 2
-            // ではダメで、
-            // window.innerWidth - (2 * ARROW_HORIZONTAL_OFFSET)
-            // でもなく、今回はボタンの**外側**に合わせる、ということなので
-            // 画面幅 - (左のAROW_HORIZONTAL_OFFSET) - (右のAROW_HORIZONTAL_OFFSET)
-            // この間の空間を最大幅にする。
+            // スマホの場合、画像の左右の辺がボタンの外側と揃うように調整
             maxImageWidthForContent = window.innerWidth - ARROW_HORIZONTAL_OFFSET * 2;
           }
 
           // Image scaling logic
-          if (imageAspectRatio > maxImageWidthForContent / availableImageHeight) {
+          if (imageAspectRatio > maxImageWidthForContent / availableViewportHeight) {
             // Image is wider than available content area ratio (horizontal constraint)
             targetImageWidth = maxImageWidthForContent;
             targetImageHeight = maxImageWidthForContent / imageAspectRatio;
           } else {
             // Image is taller than available content area ratio (vertical constraint)
-            targetImageHeight = availableImageHeight;
-            targetImageWidth = availableImageHeight * imageAspectRatio;
+            targetImageHeight = availableViewportHeight;
+            targetImageWidth = availableViewportHeight * imageAspectRatio;
           }
 
           // Ensure image doesn't exceed its natural dimensions
@@ -447,7 +447,7 @@
 
           // Apply calculated dimensions to lightboxContent
           lightboxContent.style.width = `${targetImageWidth}px`;
-          lightboxContent.style.height = `${targetImageHeight + closeButtonHeight}px`;
+          lightboxContent.style.height = `${targetImageHeight}px`;
 
           lightboxImage.style.opacity = "1"; // Show image after sizing
         };
@@ -481,6 +481,8 @@
       lightboxCloseButton.addEventListener("click", closeLightbox);
 
       lightboxOverlay.addEventListener("click", function (event) {
+        // CLOSEボタンがクリックされた場合は、このイベントは伝播しないようにする (stopPropagation)
+        // もし lightboxCloseButton 以外をクリックしたら閉じる
         if (event.target === lightboxOverlay) {
           closeLightbox();
         }
@@ -500,6 +502,48 @@
       window.addEventListener("resize", () => {
         if (lightboxOverlay.classList.contains("active")) {
           setLightboxImageAndSize(currentImageIndex); // Re-run to recalculate size
+        }
+      });
+
+      // --- Swipe functionality for Lightbox (mobile only) ---
+      lightboxOverlay.addEventListener("touchstart", (e) => {
+        // Only enable swipe on mobile and if a single touch
+        if (window.innerWidth <= 768 && e.touches.length === 1) {
+          startX = e.touches[0].clientX;
+          startY = e.touches[0].clientY; // Capture Y to differentiate horizontal/vertical swipe
+        }
+      });
+
+      lightboxOverlay.addEventListener(
+        "touchmove",
+        (e) => {
+          if (window.innerWidth <= 768 && e.touches.length === 1) {
+            const currentX = e.touches[0].clientX;
+            const currentY = e.touches[0].clientY;
+            const diffX = startX - currentX;
+            const diffY = startY - currentY;
+
+            // Prevent vertical scrolling while swiping horizontally
+            if (Math.abs(diffX) > Math.abs(diffY)) {
+              e.preventDefault();
+            }
+          }
+        },
+        { passive: false }
+      ); // Use passive: false to allow preventDefault
+
+      lightboxOverlay.addEventListener("touchend", (e) => {
+        if (window.innerWidth <= 768) {
+          const endX = e.changedTouches[0].clientX;
+          const diffX = startX - endX;
+
+          if (diffX > SWIPE_THRESHOLD) {
+            // Swipe left (next image)
+            setLightboxImageAndSize(currentImageIndex + 1);
+          } else if (diffX < -SWIPE_THRESHOLD) {
+            // Swipe right (previous image)
+            setLightboxImageAndSize(currentImageIndex - 1);
+          }
         }
       });
     </script>

@@ -8,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
 
     <script>
+      // Tailwind CSS configuration for dark mode
       tailwind.config = {
         darkMode: "class",
         theme: {
@@ -20,23 +21,23 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;500&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@300;400;500&family=Poppins:wght@300;400;500&family=Lato:wght@300;400;700&display=swap" rel="stylesheet" />
 
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet" />
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
     <style>
-      /* Apply Google Fonts */
+      /* Apply Google Fonts, Lato as primary */
       body {
-        font-family: "Poppins", "Noto Sans JP", sans-serif;
+        font-family: "Lato", "Poppins", "Noto Sans JP", sans-serif;
       }
       /* Fix for anchor links being hidden by fixed header */
       html {
         scroll-padding-top: 120px;
         scroll-behavior: smooth;
       }
-      /* Add a subtle shadow to text for readability */
+      /* Add a subtle shadow to text for readability on hero image */
       .text-shadow {
         text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
       }
@@ -70,28 +71,25 @@
         flex-direction: column;
         align-items: center;
         justify-content: center;
-        /* Sizes will be set by JS dynamically */
       }
       .lightbox-content img {
         max-width: 100%; /* Parent's width */
         max-height: 100%; /* Parent's height */
         object-fit: contain; /* Ensure full image is visible */
-        border-radius: 0; /* Remove rounded corners */
         box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
       }
 
-      /* Navigation arrows for lightbox */
-      .lightbox-nav-arrow {
-        position: absolute; /* Relative to lightbox-overlay */
+      /* Navigation arrows for lightbox and close button base styles */
+      .lightbox-nav-arrow,
+      #lightbox-close {
+        position: absolute;
         top: 50%;
         transform: translateY(-50%);
         background-color: rgba(0, 0, 0, 0.5);
         color: white;
-        width: 48px; /* Set desired button size */
-        height: 48px; /* Set desired button size */
-        padding: 0;
+        width: 48px;
+        height: 48px;
         border: none;
-        border-radius: 0; /* Make it square */
         cursor: pointer;
         user-select: none;
         transition: background-color 0.2s ease;
@@ -101,47 +99,32 @@
         justify-content: center;
         font-family: inherit;
         outline: none;
+        border-radius: 0; /* Make it square */
       }
 
-      .lightbox-nav-arrow:hover {
-        background-color: rgba(0, 0, 0, 0.8);
-      }
-
-      /* Fixed positioning for arrows, regardless of image size */
-      #lightbox-prev {
-        left: 24px; /* Fixed distance from left edge */
-      }
-
-      #lightbox-next {
-        right: 24px; /* Fixed distance from right edge */
-      }
-
-      /* Lightbox Close Button - positioned at top-right */
+      /* Position close button at top right, reset transform */
       #lightbox-close {
-        position: absolute;
         top: 0;
         right: 0;
-        background-color: rgba(0, 0, 0, 0.5);
-        color: white;
-        width: 48px; /* Fixed size */
-        height: 48px; /* Fixed size */
-        border: none;
-        border-radius: 0; /* Square shape */
-        cursor: pointer;
+        transform: translateY(0);
         z-index: 1020; /* In front of navigation arrows */
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: inherit;
-        outline: none;
-        transition: background-color 0.2s ease;
       }
 
+      .lightbox-nav-arrow:hover,
       #lightbox-close:hover {
         background-color: rgba(0, 0, 0, 0.8);
       }
 
-      /* Material Symbols Fill style and centering for square area */
+      /* Fixed positioning for arrows */
+      #lightbox-prev {
+        left: 24px;
+      }
+
+      #lightbox-next {
+        right: 24px;
+      }
+
+      /* Material Symbols Fill style and centering */
       .material-symbols-rounded {
         font-variation-settings: "FILL" 1, "wght" 400, "GRAD" 0, "opsz" 24;
         font-size: 24px; /* Default icon size */
@@ -149,86 +132,25 @@
         display: flex;
         align-items: center;
         justify-content: center;
+        width: 24px; /* Ensure a square area for centering */
+        height: 24px; /* Ensure a square area for centering */
       }
-      /* Specific override for theme toggle */
+      /* Specific override for theme toggle icon */
       #theme-toggle .material-symbols-rounded {
         width: 20px;
         height: 20px;
         font-size: 20px;
       }
-      /* Specific override for back-to-top button */
-      #back-to-top .material-symbols-rounded {
-        font-size: 24px;
-        width: 24px;
-        height: 24px;
-      }
-      /* Specific override for lightbox navigation arrows */
-      .lightbox-nav-arrow .material-symbols-rounded {
-        font-size: 24px;
-      }
-      /* Specific override for close button icon */
-      #lightbox-close .material-symbols-rounded {
-        font-size: 24px;
-      }
       /* Specific override for mobile menu icon */
       #mobile-menu-icon {
-        font-size: 28px; /* Adjust size for hamburger icon */
+        font-size: 28px;
         width: 28px;
         height: 28px;
-      }
-
-      /* Fade-in and slide-up animation styles */
-      .fade-in-item {
-        /* !important を一時的に追加して、Tailwindなどの他のスタイルに上書きされないか確認 */
-        opacity: 0 !important;
-        transform: translateY(20px) !important; /* Start slightly below */
-        transition: opacity 1s ease-out, transform 1s ease-out !important; /* Match duration for smoothness */
-      }
-
-      .fade-in-item.is-visible {
-        opacity: 1 !important;
-        transform: translateY(0) !important; /* Slide up to original position */
-      }
-
-      /* Delay for staggered animation for Gallery and Blog sections */
-      #gallery h3.fade-in-item {
-        transition-delay: 0s;
-      }
-      #gallery p.fade-in-item {
-        transition-delay: 0.1s;
-      }
-      /* Gallery images with staggered delay */
-      #gallery .grid > div:nth-child(1) img.fade-in-item {
-        transition-delay: 0.2s;
-      }
-      #gallery .grid > div:nth-child(2) img.fade-in-item {
-        transition-delay: 0.3s;
-      }
-      #gallery .grid > div:nth-child(3) img.fade-in-item {
-        transition-delay: 0.4s;
-      }
-      #gallery .grid > div:nth-child(4) img.fade-in-item {
-        transition-delay: 0.5s;
-      }
-      #gallery .text-center a.fade-in-item {
-        transition-delay: 0.6s;
-      }
-
-      #blog h3.fade-in-item {
-        transition-delay: 0s;
-      }
-      #blog .grid > a:nth-child(1).fade-in-item {
-        transition-delay: 0.1s;
-      }
-      #blog .grid > a:nth-child(2).fade-in-item {
-        transition-delay: 0.2s;
-      }
-      #blog .grid > a:nth-child(3).fade-in-item {
-        transition-delay: 0.3s;
       }
     </style>
     <script>
       // Set theme on page load to prevent Flash of Unstyled Content (FOUC)
+      // This script runs before the body is fully loaded to prevent a flash of unstyled content.
       if (localStorage.theme === "dark" || (!("theme" in localStorage) && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
         document.documentElement.classList.add("dark");
       } else {
@@ -240,7 +162,7 @@
     <header class="bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm sticky top-0 z-50 border-b border-gray-200 dark:border-gray-700 transition-colors duration-300">
       <div class="container mx-auto px-6 py-4 flex justify-between items-center">
         <a href="#" id="logo-link">
-          <h1 class="text-xl font-medium tracking-wider text-gray-800 dark:text-gray-100">OUR DAYS</h1>
+          <h1 class="text-xl font-bold tracking-wider text-gray-800 dark:text-gray-100">OUR DAYS</h1>
         </a>
 
         <div class="flex items-center">
@@ -249,12 +171,12 @@
             <a href="#blog" class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white transition-colors">Blog</a>
           </nav>
 
-          <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 focus:outline-none rounded-lg text-sm p-2.5">
-            <span id="theme-toggle-dark-icon" class="material-symbols-rounded w-5 h-5">dark_mode</span>
-            <span id="theme-toggle-light-icon" class="material-symbols-rounded w-5 h-5 hidden">light_mode</span>
+          <button id="theme-toggle" type="button" class="text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white focus:outline-none text-sm p-2.5">
+            <span id="theme-toggle-dark-icon" class="material-symbols-rounded">dark_mode</span>
+            <span id="theme-toggle-light-icon" class="material-symbols-rounded">light_mode</span>
           </button>
 
-          <button id="mobile-menu-button" class="md:hidden text-gray-500 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white focus:outline-none ml-2">
+          <button id="mobile-menu-button" class="md:hidden text-gray-500 dark:text-gray-400 hover:text-gray-500 dark:hover:text-gray-400 focus:outline-none focus:text-gray-500 dark:focus:text-gray-400 ml-2">
             <span id="mobile-menu-icon" class="material-symbols-rounded">menu</span>
           </button>
         </div>
@@ -274,55 +196,55 @@
           <img src="images/hero.jpg" alt="A beautiful day with Vivi" class="w-full h-full object-cover" />
         </picture>
         <div class="text-center z-10">
-          <h2 class="text-4xl md:text-5xl font-light tracking-widest text-shadow">LIFE WITH FAMILY</h2>
-          <p class="text-lg md:text-xl mt-2 text-shadow">A simple record of our days.</p>
+          <h2 class="text-4xl md:text-5xl font-bold tracking-widest text-shadow">LIFE WITH FAMILY</h2>
+          <p class="text-lg md:text-xl mt-2 font-light text-shadow">A simple record of our days.</p>
         </div>
       </section>
 
       <section id="gallery" class="py-16 md:py-24">
         <div class="container mx-auto px-6">
           <div class="text-center mb-12">
-            <h3 class="text-3xl font-light text-center text-gray-800 dark:text-gray-100 tracking-wider fade-in-item">Gallery</h3>
-            <p class="mt-4 text-gray-600 dark:text-gray-400 fade-in-item">Memories of our family and our dog, Vivi, living in Saitama. We also post videos on our Instagram.</p>
+            <h3 class="text-3xl font-bold text-center text-gray-800 dark:text-gray-100 tracking-wider">Gallery</h3>
+            <p class="mt-4 text-gray-600 dark:text-gray-400 font-light">Memories of our family and our dog, Vivi, living in Saitama. We also post videos on our Instagram.</p>
           </div>
           <div class="grid grid-cols-2 md:grid-cols-4 gap-2">
-            <div class="w-full aspect-square overflow-hidden"><img class="w-full h-full object-cover hover:opacity-80 transition-opacity cursor-pointer fade-in-item" src="images/g1.jpg" alt="Gallery image 1" data-original-src="images/g1.jpg" /></div>
-            <div class="w-full aspect-square overflow-hidden"><img class="w-full h-full object-cover hover:opacity-80 transition-opacity cursor-pointer fade-in-item" src="images/g2.jpg" alt="Gallery image 2" data-original-src="images/g2.jpg" /></div>
-            <div class="w-full aspect-square overflow-hidden"><img class="w-full h-full object-cover hover:opacity-80 transition-opacity cursor-pointer fade-in-item" src="images/g3.jpg" alt="Gallery image 3" data-original-src="images/g3.jpg" /></div>
-            <div class="w-full aspect-square overflow-hidden"><img class="w-full h-full object-cover hover:opacity-80 transition-opacity cursor-pointer fade-in-item" src="images/g4.jpg" alt="Gallery image 4" data-original-src="images/g4.jpg" /></div>
+            <div class="w-full aspect-square overflow-hidden"><img class="w-full h-full object-cover hover:opacity-80 transition-opacity cursor-pointer" src="images/g1.jpg" alt="Gallery image 1" data-original-src="images/g1.jpg" /></div>
+            <div class="w-full aspect-square overflow-hidden"><img class="w-full h-full object-cover hover:opacity-80 transition-opacity cursor-pointer" src="images/g2.jpg" alt="Gallery image 2" data-original-src="images/g2.jpg" /></div>
+            <div class="w-full aspect-square overflow-hidden"><img class="w-full h-full object-cover hover:opacity-80 transition-opacity cursor-pointer" src="images/g3.jpg" alt="Gallery image 3" data-original-src="images/g3.jpg" /></div>
+            <div class="w-full aspect-square overflow-hidden"><img class="w-full h-full object-cover hover:opacity-80 transition-opacity cursor-pointer" src="images/g4.jpg" alt="Gallery image 4" data-original-src="images/g4.jpg" /></div>
           </div>
           <div class="text-center mt-12">
-            <a href="https://www.instagram.com/viviiizuka/" target="_blank" class="text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white text-base font-medium fade-in-item">VIEW MORE &rarr;</a>
+            <a href="https://www.instagram.com/viviiizuka/" target="_blank" class="text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-white text-base font-medium">VIEW MORE &rarr;</a>
           </div>
         </div>
       </section>
 
       <section id="blog" class="py-16 md:py-24 bg-white dark:bg-black">
         <div class="container mx-auto px-6">
-          <h3 class="text-3xl font-light text-center mb-12 text-gray-800 dark:text-gray-100 tracking-wider fade-in-item">Recent Posts</h3>
+          <h3 class="text-3xl font-bold text-center mb-12 text-gray-800 dark:text-gray-100 tracking-wider">Recent Posts</h3>
           <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-            <a href="#" class="block bg-white dark:bg-gray-800 overflow-hidden group rounded-md border border-gray-200 dark:border-gray-700 fade-in-item">
+            <a href="#" class="block bg-white dark:bg-gray-800 overflow-hidden group rounded-md border border-gray-200 dark:border-gray-700">
               <img src="https://images.unsplash.com/photo-1703733572989-026dbaf7fc96?q=80&w=400&h=250&auto=format&fit=crop" alt="A chihuahua running in a park" class="w-full h-48 object-cover group-hover:opacity-80 transition-opacity" />
               <div class="p-5">
-                <span class="text-sm text-gray-500 dark:text-gray-400">June 8, 2025</span>
-                <h4 class="font-medium text-lg my-1 text-gray-800 dark:text-gray-100">First time at the dog park!</h4>
-                <span class="text-gray-500 dark:text-gray-400 group-hover:text-gray-800 dark:group-hover:text-white text-sm font-medium">READ MORE &rarr;</span>
+                <span class="text-sm text-gray-500 dark:text-gray-400 font-light">June 8, 2025</span>
+                <h4 class="font-bold text-lg my-1 text-gray-800 dark:text-gray-100">First time at the dog park!</h4>
+                <span class="text-gray-500 dark:text-gray-400 group-hover:text-gray-800 dark:group-hover:text-white text-sm font-light">READ MORE &rarr;</span>
               </div>
             </a>
-            <a href="#" class="block bg-white dark:bg-gray-800 overflow-hidden group rounded-md border border-gray-200 dark:border-gray-700 fade-in-item">
+            <a href="#" class="block bg-white dark:bg-gray-800 overflow-hidden group rounded-md border border-gray-200 dark:border-gray-700">
               <img src="https://plus.unsplash.com/premium_photo-1675881736832-66baa763cd4e?q=80&w=400&h=250&auto=format&fit=crop" alt="A dog with a birthday cake" class="w-full h-48 object-cover group-hover:opacity-80 transition-opacity" />
               <div class="p-5">
-                <span class="text-sm text-gray-500 dark:text-gray-400">May 20, 2025</span>
-                <h4 class="font-medium text-lg my-1 text-gray-800 dark:text-gray-100">Vivi's homemade birthday cake</h4>
-                <span class="text-gray-500 dark:text-gray-400 group-hover:text-gray-800 dark:group-hover:text-white text-sm font-medium">READ MORE &rarr;</span>
+                <span class="text-sm text-gray-500 dark:text-gray-400 font-light">May 20, 2025</span>
+                <h4 class="font-bold text-lg my-1 text-gray-800 dark:text-gray-100">Vivi's homemade birthday cake</h4>
+                <span class="text-gray-500 dark:text-gray-400 group-hover:text-gray-800 dark:group-hover:text-white text-sm font-light">READ MORE &rarr;</span>
               </div>
             </a>
-            <a href="#" class="block bg-white dark:bg-gray-800 overflow-hidden group rounded-md border border-gray-200 dark:border-gray-700 fade-in-item">
+            <a href="#" class="block bg-white dark:bg-gray-800 overflow-hidden group rounded-md border border-gray-200 dark:border-gray-700">
               <img src="https://images.unsplash.com/photo-1745922462555-64c500d4f0c8?q=80&w=400&h=250&auto=format&fit=crop" alt="A dog in a field of flowers" class="w-full h-48 object-cover group-hover:opacity-80 transition-opacity" />
               <div class="p-5">
-                <span class="text-sm text-gray-500 dark:text-gray-400">April 15, 2025</span>
-                <h4 class="font-medium text-lg my-1 text-gray-800 dark:text-gray-100">A walk in the park for cherry blossoms</h4>
-                <span class="text-gray-500 dark:text-gray-400 group-hover:text-gray-800 dark:group-hover:text-white text-sm font-medium">READ MORE &rarr;</span>
+                <span class="text-sm text-gray-500 dark:text-gray-400 font-light">April 15, 2025</span>
+                <h4 class="font-bold text-lg my-1 text-gray-800 dark:text-gray-100">A walk in the park for cherry blossoms</h4>
+                <span class="text-gray-500 dark:text-gray-400 group-hover:text-gray-800 dark:group-hover:text-white text-sm font-light">READ MORE &rarr;</span>
               </div>
             </a>
           </div>
@@ -332,11 +254,11 @@
 
     <footer class="bg-gray-800 dark:bg-black">
       <div class="container mx-auto px-6 py-12 text-center">
-        <p class="mb-4 text-gray-400">Follow Us</p>
+        <p class="mb-4 text-gray-400 font-light">Follow Us</p>
         <div class="flex justify-center space-x-6 mb-8">
           <a href="https://www.instagram.com/viviiizuka/" target="_blank" class="text-2xl text-gray-300 hover:text-white transition-colors"><i class="fab fa-instagram"></i></a>
         </div>
-        <p class="text-gray-500 text-sm">&copy; 2025 Our Days. All Rights Reserved.</p>
+        <p class="text-gray-500 text-sm font-light">&copy; 2025 Our Days. All Rights Reserved.</p>
       </div>
     </footer>
 
@@ -346,7 +268,7 @@
       </button>
       <div id="lightbox-content" class="lightbox-content">
         <img id="lightbox-image" src="" alt="Enlarged Gallery Image" />
-        <button id="lightbox-close" type="button" class="absolute top-4 right-4 bg-black/50 text-white rounded-full w-12 h-12 flex items-center justify-center cursor-pointer z-20">
+        <button id="lightbox-close" type="button" class="absolute top-4 right-4 bg-black/50 text-white w-12 h-12 flex items-center justify-center cursor-pointer z-20">
           <span class="material-symbols-rounded">close</span>
         </button>
       </div>
@@ -363,21 +285,15 @@
       // Hamburger menu functionality
       const mobileMenuButton = document.getElementById("mobile-menu-button");
       const mobileMenu = document.getElementById("mobile-menu");
-      const mobileMenuIcon = document.getElementById("mobile-menu-icon"); // Get the icon span
+      const mobileMenuIcon = document.getElementById("mobile-menu-icon");
 
       mobileMenuButton.addEventListener("click", () => {
         mobileMenu.classList.toggle("hidden");
-        // Toggle icon based on menu visibility
-        if (mobileMenu.classList.contains("hidden")) {
-          mobileMenuIcon.textContent = "menu"; // Menu is closed
-        } else {
-          mobileMenuIcon.textContent = "close"; // Menu is open
-        }
+        mobileMenuIcon.textContent = mobileMenu.classList.contains("hidden") ? "menu" : "close";
       });
       document.querySelectorAll("#mobile-menu a").forEach((link) => {
         link.addEventListener("click", () => {
           mobileMenu.classList.add("hidden");
-          // Reset icon when menu link is clicked (menu closes)
           mobileMenuIcon.textContent = "menu";
         });
       });
@@ -397,11 +313,12 @@
         window.scrollTo({ top: 0, behavior: "smooth" });
       });
 
-      // --- THEME TOGGLE ---
+      // Theme toggle functionality
       const themeToggleDarkIcon = document.getElementById("theme-toggle-dark-icon");
       const themeToggleLightIcon = document.getElementById("theme-toggle-light-icon");
       const themeToggleButton = document.getElementById("theme-toggle");
 
+      // Function to update the visibility of theme icons
       const updateThemeIcons = () => {
         if (document.documentElement.classList.contains("dark")) {
           themeToggleLightIcon.classList.remove("hidden");
@@ -412,16 +329,18 @@
         }
       };
 
+      // Set initial icon state on page load
       updateThemeIcons();
 
+      // Add event listener to toggle theme on button click
       themeToggleButton.addEventListener("click", () => {
         document.documentElement.classList.toggle("dark");
         let newTheme = document.documentElement.classList.contains("dark") ? "dark" : "light";
         localStorage.setItem("theme", newTheme);
-        updateThemeIcons();
+        updateThemeIcons(); // Update icons after theme change
       });
 
-      // --- GALLERY LIGHTBOX FUNCTIONALITY ---
+      // Gallery Lightbox functionality
       const galleryImages = Array.from(document.querySelectorAll("#gallery .grid > div > img"));
       const lightboxOverlay = document.getElementById("lightbox-overlay");
       const lightboxContent = document.getElementById("lightbox-content");
@@ -430,56 +349,30 @@
       const lightboxPrevButton = document.getElementById("lightbox-prev");
       const lightboxNextButton = document.getElementById("lightbox-next");
 
-      const NAV_ARROW_SIZE = 48; // px
-      const ARROW_HORIZONTAL_OFFSET = 24; // px - Distance from browser edge
+      const ARROW_HORIZONTAL_OFFSET = 24; // Distance of navigation arrows from screen edge
 
       let currentImageIndex = 0;
       let startX = 0; // For swipe
       let startY = 0; // For swipe
-      const SWIPE_THRESHOLD = 50; // px - Minimum swipe distance
-
-      // Function to clean image URL parameters (useful if you ever switch back to Unsplash or other services with query params)
-      const cleanImageUrl = (url) => {
-        try {
-          const urlObj = new URL(url, window.location.origin);
-          urlObj.searchParams.delete("w");
-          urlObj.searchParams.delete("h");
-          urlObj.searchParams.delete("crop");
-          urlObj.searchParams.delete("fit");
-          urlObj.searchParams.delete("auto");
-          urlObj.searchParams.delete("q");
-          return urlObj.toString();
-        } catch (e) {
-          console.error("Invalid URL:", url, e);
-          return url;
-        }
-      };
+      const SWIPE_THRESHOLD = 50; // Minimum swipe distance to trigger navigation
 
       const setLightboxImageAndSize = (index) => {
-        if (index < 0) {
-          currentImageIndex = galleryImages.length - 1;
-        } else if (index >= galleryImages.length) {
-          currentImageIndex = 0;
-        } else {
-          currentImageIndex = index;
-        }
+        currentImageIndex = (index + galleryImages.length) % galleryImages.length; // Loop through images
 
         const imageToLoad = galleryImages[currentImageIndex].dataset.originalSrc || galleryImages[currentImageIndex].src;
 
-        // Hide image and reset sizes before loading new one
+        // Hide image before loading new one to prevent visual glitches
         lightboxImage.style.opacity = "0";
-        lightboxContent.style.width = ""; // Reset for recalculation
-        lightboxContent.style.height = ""; // Reset for recalculation
 
-        // Ensure image element max-width/height is reset to allow natural sizing first
+        // Reset sizes for recalculation
+        lightboxContent.style.width = "";
+        lightboxContent.style.height = "";
         lightboxImage.style.maxWidth = "100%";
         lightboxImage.style.maxHeight = "100%";
 
         lightboxImage.onload = () => {
-          // Calculate available space for the *entire lightbox content area* (including image and close button)
-          // Desktop: 32px overall margin on each side (64px total horizontal margin)
-          // Mobile: 16px overall margin on each side (32px total horizontal margin)
-          const overallHorizontalMargin = window.innerWidth > 768 ? 64 : 32;
+          // Calculate available space for the lightbox content, considering margins
+          const overallHorizontalMargin = window.innerWidth > 768 ? 64 : 32; // Desktop vs Mobile margin
           const overallVerticalMargin = window.innerHeight > 768 ? 64 : 32;
 
           const availableViewportWidth = window.innerWidth - overallHorizontalMargin;
@@ -487,97 +380,100 @@
 
           const imageNaturalWidth = lightboxImage.naturalWidth;
           const imageNaturalHeight = lightboxImage.naturalHeight;
-
           const imageAspectRatio = imageNaturalWidth / imageNaturalHeight;
+
           let targetImageWidth, targetImageHeight;
 
-          // Determine the maximum width for the image based on screen size AND button positions for mobile
+          // Adjust available width for mobile to account for arrow buttons
           let maxImageWidthForContent = availableViewportWidth;
           if (window.innerWidth <= 768) {
-            // For mobile, adjust so image edges align with the outside of the buttons
             maxImageWidthForContent = window.innerWidth - ARROW_HORIZONTAL_OFFSET * 2;
           }
 
-          // Image scaling logic
+          // Determine target dimensions maintaining aspect ratio
           if (imageAspectRatio > maxImageWidthForContent / availableViewportHeight) {
-            // Image is wider than available content area ratio (horizontal constraint)
+            // Image is wider than available content area ratio
             targetImageWidth = maxImageWidthForContent;
             targetImageHeight = maxImageWidthForContent / imageAspectRatio;
           } else {
-            // Image is taller than available content area ratio (vertical constraint)
+            // Image is taller than available content area ratio
             targetImageHeight = availableViewportHeight;
             targetImageWidth = availableViewportHeight * imageAspectRatio;
           }
 
-          // Ensure image doesn't exceed its natural dimensions
+          // Ensure target dimensions do not exceed the image's natural dimensions
           if (targetImageWidth > imageNaturalWidth) targetImageWidth = imageNaturalWidth;
           if (targetImageHeight > imageNaturalHeight) targetImageHeight = imageNaturalHeight;
 
-          // Apply calculated dimensions to lightboxContent
+          // Apply calculated dimensions to the lightbox content container
           lightboxContent.style.width = `${targetImageWidth}px`;
           lightboxContent.style.height = `${targetImageHeight}px`;
 
-          lightboxImage.style.opacity = "1"; // Show image after sizing
+          // Show image after it's loaded and sized
+          lightboxImage.style.opacity = "1";
         };
 
         lightboxImage.onerror = () => {
           console.error("Failed to load image:", imageToLoad);
-          // Optionally show a placeholder or error message
+          // Optional: Add error handling like displaying a broken image icon or message
         };
 
-        // Set the src to trigger load
+        // Set the src to trigger image load
         lightboxImage.src = imageToLoad;
       };
 
+      // Add click listeners to gallery images to open lightbox
       galleryImages.forEach((img, index) => {
         img.addEventListener("click", function () {
           setLightboxImageAndSize(index);
           lightboxOverlay.classList.add("active");
-          document.body.style.overflow = "hidden";
+          document.body.style.overflow = "hidden"; // Prevent background scrolling
         });
       });
 
+      // Close lightbox function
       const closeLightbox = () => {
         lightboxOverlay.classList.remove("active");
-        document.body.style.overflow = "";
-        // Reset lightbox content dimensions when closed
+        document.body.style.overflow = ""; // Restore background scrolling
+        // Reset lightbox content dimensions when closed to avoid layout issues for next open
         lightboxContent.style.width = "";
         lightboxContent.style.height = "";
-        lightboxImage.style.opacity = "1"; // Ensure it's visible next time
+        lightboxImage.style.opacity = "1"; // Ensure it's visible if opened again
       };
 
+      // Add click listener to close button
       lightboxCloseButton.addEventListener("click", closeLightbox);
 
+      // Close lightbox if clicking on the overlay itself (outside the image)
       lightboxOverlay.addEventListener("click", function (event) {
-        // If the click target is the overlay itself, close the lightbox
         if (event.target === lightboxOverlay) {
           closeLightbox();
         }
       });
 
+      // Navigation button click listeners
       lightboxPrevButton.addEventListener("click", (event) => {
-        event.stopPropagation(); // Prevent closing lightbox if overlay click handler is active
+        event.stopPropagation(); // Prevent closing lightbox if clicking button triggers overlay click
         setLightboxImageAndSize(currentImageIndex - 1);
       });
 
       lightboxNextButton.addEventListener("click", (event) => {
-        event.stopPropagation(); // Prevent closing lightbox if overlay click handler is active
+        event.stopPropagation(); // Prevent closing lightbox if clicking button triggers overlay click
         setLightboxImageAndSize(currentImageIndex + 1);
       });
 
-      // Re-calculate lightbox size on window resize
+      // Recalculate lightbox size on window resize if active
       window.addEventListener("resize", () => {
         if (lightboxOverlay.classList.contains("active")) {
-          setLightboxImageAndSize(currentImageIndex); // Re-run to recalculate size
+          setLightboxImageAndSize(currentImageIndex);
         }
       });
 
-      // --- Swipe functionality for Lightbox (mobile only) ---
+      // Swipe functionality for Lightbox (mobile only)
       lightboxOverlay.addEventListener("touchstart", (e) => {
-        // Only enable swipe on mobile and if a single touch
         if (window.innerWidth <= 768 && e.touches.length === 1) {
           startX = e.touches[0].clientX;
-          startY = e.touches[0].clientY; // Capture Y to differentiate horizontal/vertical swipe
+          startY = e.touches[0].clientY;
         }
       });
 
@@ -590,7 +486,7 @@
             const diffX = startX - currentX;
             const diffY = startY - currentY;
 
-            // Prevent vertical scrolling while swiping horizontally
+            // Prevent vertical scrolling while performing horizontal swipe
             if (Math.abs(diffX) > Math.abs(diffY)) {
               e.preventDefault();
             }
@@ -605,75 +501,16 @@
           const diffX = startX - endX;
 
           if (diffX > SWIPE_THRESHOLD) {
-            // Swipe left (next image)
+            // Swipe left (to next image)
             setLightboxImageAndSize(currentImageIndex + 1);
           } else if (diffX < -SWIPE_THRESHOLD) {
-            // Swipe right (previous image)
+            // Swipe right (to previous image)
             setLightboxImageAndSize(currentImageIndex - 1);
           }
         }
       });
 
-      // --- Intersection Observer for fade-in animation ---
-      // Select all elements that should fade in individually
-      const fadeInItems = document.querySelectorAll("#gallery h3, #gallery p, #gallery .grid img, #gallery a, #blog h3, #blog .grid a");
-
-      let animationObserver; // Declare observer in a scope accessible for recreation
-
-      const observerOptions = {
-        root: null, // relative to the viewport
-        rootMargin: "0px",
-        threshold: 0.1, // 10% of the item must be visible to trigger
-      };
-
-      const setupObserver = () => {
-        if (animationObserver) {
-          animationObserver.disconnect(); // Disconnect existing observer if it exists
-        }
-
-        animationObserver = new IntersectionObserver((entries, observer) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              entry.target.classList.add("is-visible");
-              observer.unobserve(entry.target); // Stop observing once it's visible
-            }
-          });
-        }, observerOptions);
-
-        fadeInItems.forEach((item) => {
-          // Reset item state before observing to ensure animation plays again on re-entry
-          item.classList.remove("is-visible"); // Ensure it's not visible
-          item.classList.add("fade-in-item"); // Ensure initial hidden state and transition
-          animationObserver.observe(item);
-        });
-      };
-
-      // Call setupObserver on initial load
-      document.addEventListener("DOMContentLoaded", setupObserver);
-
-      // --- Reset animations on scroll to top ---
-      let isAtTop = true; // Flag to track if the user is at the top of the page
-
-      window.addEventListener("scroll", () => {
-        // Check if user is at the very top of the page (within a small buffer)
-        if (window.scrollY < 50 && !isAtTop) {
-          isAtTop = true;
-          // When scrolling back to top, remove 'is-visible' and re-observe to allow re-animation
-          fadeInItems.forEach((item) => {
-            item.classList.remove("is-visible");
-          });
-          setupObserver(); // Re-setup observer to re-trigger animations on next scroll down
-        } else if (window.scrollY >= 50 && isAtTop) {
-          isAtTop = false;
-        }
-      });
-
-      // Initial check when page loads (in case it loads scrolled down)
-      document.addEventListener("DOMContentLoaded", () => {
-        if (window.scrollY > 50) {
-          isAtTop = false; // Mark as not at top if scrolled down on load
-        }
-      });
+      // Removed Intersection Observer for fade-in animation as requested.
     </script>
   </body>
 </html>

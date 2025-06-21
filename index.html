@@ -133,13 +133,24 @@
         height: 24px; /* Ensure a square area for centering */
       }
 
-      /* Parallax effect for hero image: background-attachment fixed for all screens */
+      /* Parallax effect for hero image: background-attachment fixed for desktop */
       .hero-section {
         background-image: url("images/hero.jpg"); /* Set your hero image path */
-        background-attachment: fixed; /* Ensures parallax effect */
-        background-position: center;
+        background-attachment: fixed; /* Ensures parallax effect for desktop */
+        background-position: center center; /* Use center center for clarity */
         background-repeat: no-repeat;
         background-size: cover;
+      }
+
+      /* Mobile-specific adjustments (no parallax, prevent extreme zoom) */
+      @media (max-width: 768px) {
+        .hero-section {
+          background-attachment: scroll; /* Disable parallax on mobile */
+          background-position: center center; /* Keep centered */
+          background-size: cover; /* Use cover, as it should behave correctly with scroll */
+          /* If 'cover' still causes excessive zoom on iOS, try 'contain' or specific pixel values for background-size.
+             However, with background-attachment: scroll, 'cover' usually works as expected. */
+        }
       }
     </style>
   </head>

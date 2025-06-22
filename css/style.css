@@ -1,0 +1,164 @@
+/* Apply Google Fonts, Lato as primary */
+body {
+  font-family: "Lato", "Noto Sans JP", sans-serif;
+}
+/* Adjust scroll padding for fixed header */
+html {
+  scroll-padding-top: 64px;
+  scroll-behavior: smooth;
+}
+/* Add a subtle shadow to text for readability on hero image */
+.text-shadow {
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+}
+/* Lightbox specific styles */
+.lightbox-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+  user-select: none;
+  -webkit-user-drag: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.lightbox-overlay.active {
+  opacity: 1;
+  visibility: visible;
+}
+.lightbox-content {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.lightbox-content img {
+  max-width: 100%; /* Parent's width */
+  max-height: 100%; /* Parent's height */
+  object-fit: contain; /* Ensure full image is visible */
+  box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
+}
+
+/* Navigation arrows for lightbox and close button base styles */
+.lightbox-nav-arrow,
+#lightbox-close {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  width: 48px;
+  height: 48px;
+  border: none;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.2s ease;
+  z-index: 1010;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: inherit;
+  outline: none;
+  border-radius: 0; /* Make it square */
+}
+
+/* Position close button at top right, reset transform */
+#lightbox-close {
+  top: 0;
+  right: 0;
+  transform: translateY(0);
+  z-index: 1020; /* In front of navigation arrows */
+}
+
+.lightbox-nav-arrow:hover,
+#lightbox-close:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+/* Fixed positioning for arrows */
+#lightbox-prev {
+  left: 24px;
+}
+
+#lightbox-next {
+  right: 24px;
+}
+
+/* Material Symbols Fill style and centering */
+.material-symbols-rounded {
+  font-variation-settings: "FILL" 1, "wght" 100, "GRAD" 0, "opsz" 24;
+  font-size: 24px; /* Default icon size */
+  width: 24px; /* Ensure a square area for centering */
+  height: 24px; /* Ensure a square area for centering */
+}
+
+/* Hero Section Styles */
+.hero-section {
+  height: 100vh; /* Full viewport height for desktop */
+  position: relative; /* Base for absolute positioned children */
+}
+
+/* Individual slide styles for the hero slider */
+.hero-slide {
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 1s ease-in-out, visibility 1s ease-in-out; /* Fade animation */
+}
+
+/* Active slide becomes visible */
+.hero-slide.active {
+  opacity: 1;
+  visibility: visible;
+  z-index: 1; /* Bring active slide to front */
+}
+
+/* Background image properties for each slide */
+.hero-slide-bg {
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-size: cover;
+  /* Parallax effect for desktop */
+  background-attachment: fixed;
+}
+
+/* Mobile-specific adjustments for hero section */
+@media (max-width: 768px) {
+  .hero-section {
+    min-height: 500px; /* Minimum height for mobile portrait */
+    height: auto; /* Allow height to adjust based on content if needed */
+  }
+  .hero-slide-bg {
+    background-attachment: scroll; /* Disable parallax on mobile */
+  }
+}
+
+/* Landscape mode adjustments for mobile */
+@media (max-width: 768px) and (orientation: landscape) {
+  .hero-section {
+    min-height: 300px; /* Adjust minimum height for landscape orientation */
+  }
+}
+
+/* Dot navigation styles */
+.hero-slider-dot {
+  width: 10px;
+  height: 10px;
+  background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white */
+  border-radius: 50%; /* Circle shape */
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+/* Active dot becomes solid white */
+.hero-slider-dot.active {
+  background-color: white;
+}

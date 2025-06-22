@@ -29,130 +29,7 @@
 
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 
-    <style>
-      /* Apply Google Fonts, Lato as primary */
-      body {
-        font-family: "Lato", "Noto Sans JP", sans-serif;
-      }
-      /* Adjust scroll padding for fixed header */
-      html {
-        scroll-padding-top: 64px;
-        scroll-behavior: smooth;
-      }
-      /* Add a subtle shadow to text for readability on hero image */
-      .text-shadow {
-        text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
-      }
-      /* Lightbox specific styles */
-      .lightbox-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.8);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 1000;
-        opacity: 0;
-        visibility: hidden;
-        transition: opacity 0.3s ease, visibility 0.3s ease;
-        user-select: none;
-        -webkit-user-drag: none;
-        -webkit-tap-highlight-color: transparent;
-      }
-      .lightbox-overlay.active {
-        opacity: 1;
-        visibility: visible;
-      }
-      .lightbox-content {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-      }
-      .lightbox-content img {
-        max-width: 100%; /* Parent's width */
-        max-height: 100%; /* Parent's height */
-        object-fit: contain; /* Ensure full image is visible */
-        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05); /* shadow-lg */
-      }
-
-      /* Navigation arrows for lightbox and close button base styles */
-      .lightbox-nav-arrow,
-      #lightbox-close {
-        position: absolute;
-        top: 50%;
-        transform: translateY(-50%);
-        background-color: rgba(0, 0, 0, 0.5);
-        color: white;
-        width: 48px;
-        height: 48px;
-        border: none;
-        cursor: pointer;
-        user-select: none;
-        transition: background-color 0.2s ease;
-        z-index: 1010;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-family: inherit;
-        outline: none;
-        border-radius: 0; /* Make it square */
-      }
-
-      /* Position close button at top right, reset transform */
-      #lightbox-close {
-        top: 0;
-        right: 0;
-        transform: translateY(0);
-        z-index: 1020; /* In front of navigation arrows */
-      }
-
-      .lightbox-nav-arrow:hover,
-      #lightbox-close:hover {
-        background-color: rgba(0, 0, 0, 0.8);
-      }
-
-      /* Fixed positioning for arrows */
-      #lightbox-prev {
-        left: 24px;
-      }
-
-      #lightbox-next {
-        right: 24px;
-      }
-
-      /* Material Symbols Fill style and centering */
-      .material-symbols-rounded {
-        font-variation-settings: "FILL" 1, "wght" 100, "GRAD" 0, "opsz" 24;
-        font-size: 24px; /* Default icon size */
-        width: 24px; /* Ensure a square area for centering */
-        height: 24px; /* Ensure a square area for centering */
-      }
-
-      /* Parallax effect for hero image: background-attachment fixed for desktop */
-      .hero-section {
-        background-image: url("images/hero.jpg"); /* Set your hero image path */
-        background-attachment: fixed; /* Ensures parallax effect for desktop */
-        background-position: center center; /* Use center center for clarity */
-        background-repeat: no-repeat;
-        background-size: cover;
-      }
-
-      /* Mobile-specific adjustments (no parallax, prevent extreme zoom) */
-      @media (max-width: 768px) {
-        .hero-section {
-          background-attachment: scroll; /* Disable parallax on mobile */
-          background-position: center center; /* Keep centered */
-          background-size: cover; /* Use cover, as it should behave correctly with scroll */
-          /* If 'cover' still causes excessive zoom on iOS, try 'contain' or specific pixel values for background-size.
-             However, with background-attachment: scroll, 'cover' usually works as expected. */
-        }
-      }
-    </style>
+    <link rel="stylesheet" href="css/style.css" />
   </head>
   <body class="bg-light-bg text-gray-800 transition-colors duration-300">
     <header class="bg-white backdrop-blur-sm fixed top-4 left-4 right-4 z-50 transition-colors duration-300 rounded-lg shadow-lg">
@@ -180,11 +57,32 @@
     </header>
 
     <main>
-      <section id="hero-section" class="hero-section relative h-[100vh] flex items-center justify-center text-white overflow-hidden">
-        <div class="text-center z-10">
-          <h2 class="text-4xl md:text-5xl font-bold tracking-widest text-shadow">WITH FAMILY</h2>
-          <p class="text-lg md:text-xl mt-2 font-light text-shadow">A simple record of our days.</p>
+      <section id="hero-section" class="hero-section relative h-[85vh] flex items-center justify-center text-white overflow-hidden">
+        <div id="hero-slider-container" class="absolute inset-0 w-full h-full">
+          <div class="hero-slide absolute inset-0 w-full h-full flex items-center justify-center transition-opacity duration-1000 opacity-0 z-0 active">
+            <div class="hero-slide-bg w-full h-full bg-cover bg-center bg-no-repeat" style="background-image: url('images/hero1.jpg')"></div>
+            <div class="text-center z-10 absolute pointer-events-none">
+              <h2 class="text-4xl md:text-5xl font-bold tracking-widest text-shadow">WITH FAMILY</h2>
+              <p class="text-lg md:text-xl mt-2 font-light text-shadow">A simple record of our days.</p>
+            </div>
+          </div>
+          <div class="hero-slide absolute inset-0 w-full h-full flex items-center justify-center transition-opacity duration-1000 opacity-0 z-0">
+            <div class="hero-slide-bg w-full h-full bg-cover bg-center bg-no-repeat" style="background-image: url('images/hero2.jpg')"></div>
+            <div class="text-center z-10 absolute pointer-events-none">
+              <h2 class="text-4xl md:text-5xl font-bold tracking-widest text-shadow">WITH FAMILY</h2>
+              <p class="text-lg md:text-xl mt-2 font-light text-shadow">A simple record of our days.</p>
+            </div>
+          </div>
+          <div class="hero-slide absolute inset-0 w-full h-full flex items-center justify-center transition-opacity duration-1000 opacity-0 z-0">
+            <div class="hero-slide-bg w-full h-full bg-cover bg-center bg-no-repeat" style="background-image: url('images/hero3.jpg')"></div>
+            <div class="text-center z-10 absolute pointer-events-none">
+              <h2 class="text-4xl md:text-5xl font-bold tracking-widest text-shadow">WITH FAMILY</h2>
+              <p class="text-lg md:text-xl mt-2 font-light text-shadow">A simple record of our days.</p>
+            </div>
+          </div>
         </div>
+
+        <div id="hero-slider-dots" class="absolute bottom-4 left-1/2 -translate-x-1/2 z-20 flex space-x-2"></div>
       </section>
 
       <section id="gallery" class="py-16 md:py-24">
@@ -267,207 +165,6 @@
       <span class="material-symbols-rounded">arrow_upward</span>
     </button>
 
-    <script>
-      // Hamburger menu functionality
-      const mobileMenuButton = document.getElementById("mobile-menu-button");
-      const mobileMenu = document.getElementById("mobile-menu");
-      const mobileMenuIcon = document.getElementById("mobile-menu-icon");
-
-      mobileMenuButton.addEventListener("click", () => {
-        mobileMenu.classList.toggle("hidden");
-        mobileMenuIcon.textContent = mobileMenu.classList.contains("hidden") ? "menu" : "close";
-      });
-      document.querySelectorAll("#mobile-menu a").forEach((link) => {
-        link.addEventListener("click", () => {
-          mobileMenu.classList.add("hidden");
-          mobileMenuIcon.textContent = "menu";
-        });
-      });
-
-      // Scroll to top button functionality
-      const logoLink = document.getElementById("logo-link");
-      const backToTopButton = document.getElementById("back-to-top");
-      logoLink.addEventListener("click", (e) => {
-        e.preventDefault();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
-      window.addEventListener("scroll", () => {
-        if (window.scrollY > 200) backToTopButton.classList.remove("hidden");
-        else backToTopButton.classList.add("hidden");
-      });
-      backToTopButton.addEventListener("click", () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      });
-
-      // Gallery Lightbox functionality
-      const galleryImages = Array.from(document.querySelectorAll("#gallery .grid > div > img"));
-      const lightboxOverlay = document.getElementById("lightbox-overlay");
-      const lightboxContent = document.getElementById("lightbox-content");
-      const lightboxImage = document.getElementById("lightbox-image");
-      const lightboxCloseButton = document.getElementById("lightbox-close");
-      const lightboxPrevButton = document.getElementById("lightbox-prev");
-      const lightboxNextButton = document.getElementById("lightbox-next");
-
-      const ARROW_HORIZONTAL_OFFSET = 24; // Distance of navigation arrows from screen edge
-
-      let currentImageIndex = 0;
-      let startX = 0; // For swipe
-      let startY = 0; // For swipe
-      const SWIPE_THRESHOLD = 50; // Minimum swipe distance to trigger navigation
-
-      const setLightboxImageAndSize = (index) => {
-        currentImageIndex = (index + galleryImages.length) % galleryImages.length; // Loop through images
-
-        const imageToLoad = galleryImages[currentImageIndex].dataset.originalSrc || galleryImages[currentImageIndex].src;
-
-        // Hide image before loading new one to prevent visual glitches
-        lightboxImage.style.opacity = "0";
-
-        // Reset sizes for recalculation
-        lightboxContent.style.width = "";
-        lightboxContent.style.height = "";
-        lightboxImage.style.maxWidth = "100%";
-        lightboxImage.style.maxHeight = "100%";
-
-        lightboxImage.onload = () => {
-          // Calculate available space for the lightbox content, considering margins
-          const overallHorizontalMargin = window.innerWidth > 768 ? 64 : 32; // Desktop vs Mobile margin
-          const overallVerticalMargin = window.innerHeight > 768 ? 64 : 32;
-
-          const availableViewportWidth = window.innerWidth - overallHorizontalMargin;
-          const availableViewportHeight = window.innerHeight - overallVerticalMargin;
-
-          const imageNaturalWidth = lightboxImage.naturalWidth;
-          const imageNaturalHeight = lightboxImage.naturalHeight;
-          const imageAspectRatio = imageNaturalWidth / imageNaturalHeight;
-
-          let targetImageWidth, targetImageHeight;
-
-          // Adjust available width for mobile to account for arrow buttons
-          let maxImageWidthForContent = availableViewportWidth;
-          if (window.innerWidth <= 768) {
-            maxImageWidthForContent = window.innerWidth - ARROW_HORIZONTAL_OFFSET * 2;
-          }
-
-          // Determine target dimensions maintaining aspect ratio
-          if (imageAspectRatio > maxImageWidthForContent / availableViewportHeight) {
-            // Image is wider than available content area ratio
-            targetImageWidth = maxImageWidthForContent;
-            targetImageHeight = maxImageWidthForContent / imageAspectRatio;
-          } else {
-            // Image is taller than available content area ratio
-            targetImageHeight = availableViewportHeight;
-            targetImageWidth = availableViewportHeight * imageAspectRatio;
-          }
-
-          // Ensure target dimensions do not exceed the image's natural dimensions
-          if (targetImageWidth > imageNaturalWidth) targetImageWidth = imageNaturalWidth;
-          if (targetImageHeight > imageNaturalHeight) targetImageHeight = imageNaturalHeight;
-
-          // Apply calculated dimensions to the lightbox content container
-          lightboxContent.style.width = `${targetImageWidth}px`;
-          lightboxContent.style.height = `${targetImageHeight}px`;
-
-          // Show image after it's loaded and sized
-          lightboxImage.style.opacity = "1";
-        };
-
-        lightboxImage.onerror = () => {
-          console.error("Failed to load image:", imageToLoad);
-          // Optional: Add error handling like displaying a broken image icon or message
-        };
-
-        // Set the src to trigger image load
-        lightboxImage.src = imageToLoad;
-      };
-
-      // Add click listeners to gallery images to open lightbox
-      galleryImages.forEach((img, index) => {
-        img.addEventListener("click", function () {
-          setLightboxImageAndSize(index);
-          lightboxOverlay.classList.add("active");
-          document.body.style.overflow = "hidden"; // Prevent background scrolling
-        });
-      });
-
-      // Close lightbox function
-      const closeLightbox = () => {
-        lightboxOverlay.classList.remove("active");
-        document.body.style.overflow = ""; // Restore background scrolling
-        // Reset lightbox content dimensions when closed to avoid layout issues for next open
-        lightboxContent.style.width = "";
-        lightboxContent.style.height = "";
-        lightboxImage.style.opacity = "1"; // Ensure it's visible if opened again
-      };
-
-      // Add click listener to close button
-      lightboxCloseButton.addEventListener("click", closeLightbox);
-
-      // Close lightbox if clicking on the overlay itself (outside the image)
-      lightboxOverlay.addEventListener("click", function (event) {
-        if (event.target === lightboxOverlay) {
-          closeLightbox();
-        }
-      });
-
-      // Navigation button click listeners
-      lightboxPrevButton.addEventListener("click", (event) => {
-        event.stopPropagation(); // Prevent closing lightbox if clicking button triggers overlay click
-        setLightboxImageAndSize(currentImageIndex - 1);
-      });
-
-      lightboxNextButton.addEventListener("click", (event) => {
-        event.stopPropagation(); // Prevent closing lightbox if clicking button triggers overlay click
-        setLightboxImageAndSize(currentImageIndex + 1);
-      });
-
-      // Recalculate lightbox size on window resize if active
-      window.addEventListener("resize", () => {
-        if (lightboxOverlay.classList.contains("active")) {
-          setLightboxImageAndSize(currentImageIndex);
-        }
-      });
-
-      // Swipe functionality for Lightbox (mobile only)
-      lightboxOverlay.addEventListener("touchstart", (e) => {
-        if (window.innerWidth <= 768 && e.touches.length === 1) {
-          startX = e.touches[0].clientX;
-          startY = e.touches[0].clientY;
-        }
-      });
-
-      lightboxOverlay.addEventListener(
-        "touchmove",
-        (e) => {
-          if (window.innerWidth <= 768 && e.touches.length === 1) {
-            const currentX = e.touches[0].clientX;
-            const currentY = e.touches[0].clientY;
-            const diffX = startX - currentX;
-            const diffY = startY - currentY;
-
-            // Prevent vertical scrolling while performing horizontal swipe
-            if (Math.abs(diffY) > Math.abs(diffX)) {
-              e.preventDefault();
-            }
-          }
-        },
-        { passive: false } // Use passive: false to allow preventDefault
-      );
-
-      lightboxOverlay.addEventListener("touchend", (e) => {
-        if (window.innerWidth <= 768) {
-          const endX = e.changedTouches[0].clientX;
-          const diffX = startX - endX;
-
-          if (diffX > SWIPE_THRESHOLD) {
-            // Swipe left (to next image)
-            setLightboxImageAndSize(currentImageIndex + 1);
-          } else if (diffX < -SWIPE_THRESHOLD) {
-            // Swipe right (to previous image)
-            setLightboxImageAndSize(currentImageIndex - 1);
-          }
-        }
-      });
-    </script>
+    <script src="js/script.js"></script>
   </body>
 </html>
